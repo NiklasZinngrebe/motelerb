@@ -168,8 +168,9 @@
             window.addEventListener('touchstart', playOnInteraction, { once: true });
         });
 
-        document.addEventListener('touchstart', () => video.play(), { once: true });
-
+        document.addEventListener('touchstart', () => {
+            video.play().catch(() => console.log("Still blocked."));
+        }, { once: true });
 
         // --- Floating buttons animation ---
         const floatButtons = document.querySelectorAll('.float-btn');
