@@ -176,19 +176,20 @@
     video.autoplay = true;
     
     // Programmatic play
-    video.play().catch(() => {
-        console.log("Autoplay blocked on this device, user interaction required.");
+    video.addEventListener('canplay', () => {
+        video.play().catch(() => {
+            console.log("Autoplay blocked, waiting for user interaction...");
     
-        function playOnInteraction() {
-            video.play().catch(() => {
-                console.log("Still blocked.");
-            });
-            window.removeEventListener('touchstart', playOnInteraction);
-            window.removeEventListener('click', playOnInteraction);
-        }
+            // Fallback: play on first tap/click
+            function playOnInteraction() {
+                video.play().catch(() => console.log("Still blocked."));
+                window.removeEventListener('touchstart', playOnInteraction);
+                window.removeEventListener('click', playOnInteraction);
+            }
     
-        window.addEventListener('touchstart', playOnInteraction, { once: true });
-        window.addEventListener('click', playOnInteraction, { once: true });
+            window.addEventListener('touchstart', playOnInteraction, { once: true });
+            window.addEventListener('click', playOnInteraction, { once: true });
+        });
     });
     
     // Floating buttons animation
