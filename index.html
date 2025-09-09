@@ -123,6 +123,11 @@
     </style>
 </head>
 <body>
+
+    <video id="autoplay-primer" muted playsinline autoplay style="display:none" preload="auto">
+        <source src="tiny.mp4" type="video/mp4">
+    </video>
+
     <!-- Background Video -->
     <video id="bg-video" autoplay muted loop playsinline preload="auto">
         <source src="AVCHD_Test_5.mp4" type="video/mp4">
@@ -149,94 +154,101 @@
     </div>
 
     <script>
-    window.onload = () => {
-        const video = document.getElementById('bg-video');
-
-        // --- iPhone & mobile autoplay fix ---
-        video.muted = true;
-        video.autoplay = true;
-        video.playsInline = true;
-
-        video.play().catch(() => {
-            console.log("Autoplay blocked, waiting for user interaction...");
-            function playOnInteraction() {
-                video.play().catch(() => console.log("Still blocked."));
-                window.removeEventListener('click', playOnInteraction);
-                window.removeEventListener('touchstart', playOnInteraction);
-            }
-            window.addEventListener('click', playOnInteraction, { once: true });
-            window.addEventListener('touchstart', playOnInteraction, { once: true });
-        });
-
-        document.addEventListener('touchstart', () => {
-            video.play().catch(() => console.log("Still blocked."));
-        }, { once: true });
-
-        // --- Floating buttons animation ---
-        const floatButtons = document.querySelectorAll('.float-btn');
-        const directions = [];
-
-        floatButtons.forEach((btn, i) => {
-            const btnWidth = btn.offsetWidth;
-            const btnHeight = btn.offsetHeight;
-
-            btn.style.left = Math.random() * (window.innerWidth - btnWidth) + "px";
-            btn.style.top = Math.random() * (window.innerHeight - btnHeight) + "px";
-
-            directions[i] = {
-                x: (Math.random() - 0.5) * 0.5,
-                y: (Math.random() - 0.5) * 0.5
-            };
-
-            // Jump video on hover
-            btn.addEventListener('mouseenter', () => {
-                video.currentTime += 5;
-                if (video.currentTime > video.duration) video.currentTime = 0;
+        window.onload = () => {
+            const video = document.getElementById('bg-video');
+        
+            // --- Add a hidden tiny primer video ---
+            const primer = document.createElement('video');
+            primer.src = 'tiny.mp4'; // <-- replace with your tiny 1-2 sec video
+            primer.muted = true;
+            primer.autoplay = true;
+            primer.playsInline = true;
+            primer.preload = 'auto';
+            primer.style.display = 'none';
+            document.body.appendChild(primer);
+        
+            // When primer plays, start the main video
+            primer.addEventListener('play', () => {
+                video.play().catch(() => console.log("Main video still blocked."));
             });
-        });
-
-        function animate() {
+        
+            // Fallback if primer fails
+            primer.play().catch(() => {
+                console.log("Primer blocked, waiting for interaction...");
+                function playOnInteraction() {
+                    primer.play().then(() => video.play());
+                    window.removeEventListener('click', playOnInteraction);
+                    window.removeEventListener('touchstart', playOnInteraction);
+                }
+                window.addEventListener('click', playOnInteraction, { once: true });
+                window.addEventListener('touchstart', playOnInteraction, { once: true });
+            });
+        
+            // --- Floating buttons animation ---
+            const floatButtons = document.querySelectorAll('.float-btn');
+            const directions = [];
+        
             floatButtons.forEach((btn, i) => {
-                let x = parseFloat(btn.style.left) || 0;
-                let y = parseFloat(btn.style.top) || 0;
-
-                x += directions[i].x;
-                y += directions[i].y;
-
-                if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
-                if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
-
-                btn.style.left = x + "px";
-                btn.style.top = y + "px";
+                const btnWidth = btn.offsetWidth;
+                const btnHeight = btn.offsetHeight;
+        
+                btn.style.left = Math.random() * (window.innerWidth - btnWidth) + "px";
+                btn.style.top = Math.random() * (window.innerHeight - btnHeight) + "px";
+        
+                directions[i] = {
+                    x: (Math.random() - 0.5) * 0.5,
+                    y: (Math.random() - 0.5) * 0.5
+                };
+        
+                // Jump video on hover
+                btn.addEventListener('mouseenter', () => {
+                    video.currentTime += 5;
+                    if (video.currentTime > video.duration) video.currentTime = 0;
+                });
             });
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        // --- YouTube modal ---
-        const youtubeBtn = document.getElementById('youtube-btn');
-        const modal = document.getElementById('youtube-modal');
-        const closeBtn = modal.querySelector('.close-btn');
-        const iframe = document.getElementById('youtube-frame');
-
-        youtubeBtn.addEventListener('click', () => {
-            iframe.src = "https://www.youtube.com/embed/LPo7cWrP9wQ?autoplay=1";
-            modal.style.display = "flex";
-        });
-
-        closeBtn.addEventListener('click', () => {
-            iframe.src = "";
-            modal.style.display = "none";
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
+        
+            function animate() {
+                floatButtons.forEach((btn, i) => {
+                    let x = parseFloat(btn.style.left) || 0;
+                    let y = parseFloat(btn.style.top) || 0;
+        
+                    x += directions[i].x;
+                    y += directions[i].y;
+        
+                    if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
+                    if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
+        
+                    btn.style.left = x + "px";
+                    btn.style.top = y + "px";
+                });
+                requestAnimationFrame(animate);
+            }
+        
+            animate();
+        
+            // --- YouTube modal ---
+            const youtubeBtn = document.getElementById('youtube-btn');
+            const modal = document.getElementById('youtube-modal');
+            const closeBtn = modal.querySelector('.close-btn');
+            const iframe = document.getElementById('youtube-frame');
+        
+            youtubeBtn.addEventListener('click', () => {
+                iframe.src = "https://www.youtube.com/embed/LPo7cWrP9wQ?autoplay=1";
+                modal.style.display = "flex";
+            });
+        
+            closeBtn.addEventListener('click', () => {
                 iframe.src = "";
                 modal.style.display = "none";
-            }
-        });
-    };
+            });
+        
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    iframe.src = "";
+                    modal.style.display = "none";
+                }
+            });
+        };
     </script>
 </body>
 </html>
