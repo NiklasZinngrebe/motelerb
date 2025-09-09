@@ -43,7 +43,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* allow clicks only on buttons */
+            pointer-events: none; /* ok */
         }
 
         .float-btn {
@@ -185,15 +185,20 @@
     const directions = [];
     
     floatButtons.forEach((btn, i) => {
-        btn.style.left = Math.random() * (window.innerWidth - btn.offsetWidth) + "px";
-        btn.style.top = Math.random() * (window.innerHeight - btn.offsetHeight) + "px";
+        const btnWidth = btn.offsetWidth;
+        const btnHeight = btn.offsetHeight;
     
+        // Initial position in pixels
+        btn.style.left = (Math.random() * (window.innerWidth - btnWidth)) + "px";
+        btn.style.top = (Math.random() * (window.innerHeight - btnHeight)) + "px";
+    
+        // Store directions
         directions[i] = {
             x: (Math.random() - 0.5) * 0.5,
             y: (Math.random() - 0.5) * 0.5
         };
     
-        // Jump video when hovering a button
+        // Jump video on hover
         btn.addEventListener('mouseenter', () => {
             video.currentTime += 5;
             if (video.currentTime > video.duration) video.currentTime = 0;
@@ -201,23 +206,24 @@
     });
     
     function animate() {
-        floatButtons.forEach((btn, i) => {
-            let x = parseFloat(btn.style.left);
-            let y = parseFloat(btn.style.top);
-    
-            x += directions[i].x;
-            y += directions[i].y;
-    
-            if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
-            if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
-    
-            btn.style.left = x + "px";
-            btn.style.top = y + "px";
-        });
-    
-        requestAnimationFrame(animate);
-    }
-    
+    floatButtons.forEach((btn, i) => {
+        // parseFloat will return NaN if left/top empty
+        let x = parseFloat(btn.style.left) || 0;
+        let y = parseFloat(btn.style.top) || 0;
+
+        x += directions[i].x;
+        y += directions[i].y;
+
+        if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
+        if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
+
+        btn.style.left = x + "px";
+        btn.style.top = y + "px";
+    });
+
+    requestAnimationFrame(animate);
+}
+
     animate();
 
         // -------------------
