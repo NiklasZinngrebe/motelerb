@@ -169,6 +169,18 @@
 
     <script>
         const video = document.getElementById('bg-video');
+        
+        const video = document.getElementById('bg-video');
+        
+        // --- Mobile autoplay fix ---
+        video.muted = true;          // ensure muted
+        video.playsInline = true;    // prevent fullscreen on iOS
+        video.autoplay = true;       // set autoplay
+        
+        // Try to play programmatically
+        video.play().catch(() => {
+            console.log("Autoplay blocked on this device, user interaction required.");
+        });
 
         // -------------------
         // Continuous Floating Buttons
