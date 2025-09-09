@@ -129,8 +129,6 @@
         Dein Browser unterstützt dieses Videoformat nicht.
     </video>
 
-    document.addEventListener('touchstart', () => video.play(), { once: true });
-
     <!-- Overlay Text -->
     <div class="overlay-text">MOTEL ERB</div>
 
@@ -169,6 +167,9 @@
             window.addEventListener('click', playOnInteraction, { once: true });
             window.addEventListener('touchstart', playOnInteraction, { once: true });
         });
+
+        document.addEventListener('touchstart', () => video.play(), { once: true });
+
 
         // --- Floating buttons animation ---
         const floatButtons = document.querySelectorAll('.float-btn');
