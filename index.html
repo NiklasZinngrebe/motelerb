@@ -139,12 +139,13 @@
     window.onload = () => {
         const video = document.getElementById('bg-video');
 
-        // Ensure video plays programmatically
+        // --- iPhone & mobile autoplay fix ---
         video.muted = true;
-        video.playsInline = true;
         video.autoplay = true;
+        video.playsInline = true;
+
         video.play().catch(() => {
-            console.log("Autoplay blocked. Waiting for user interaction...");
+            console.log("Autoplay blocked, waiting for user interaction...");
             function playOnInteraction() {
                 video.play().catch(() => console.log("Still blocked."));
                 window.removeEventListener('click', playOnInteraction);
@@ -154,7 +155,7 @@
             window.addEventListener('touchstart', playOnInteraction, { once: true });
         });
 
-        // Floating buttons animation
+        // --- Floating buttons animation ---
         const floatButtons = document.querySelectorAll('.float-btn');
         const directions = [];
 
@@ -191,13 +192,12 @@
                 btn.style.left = x + "px";
                 btn.style.top = y + "px";
             });
-
             requestAnimationFrame(animate);
         }
 
         animate();
 
-        // YouTube modal
+        // --- YouTube modal ---
         const youtubeBtn = document.getElementById('youtube-btn');
         const modal = document.getElementById('youtube-modal');
         const closeBtn = modal.querySelector('.close-btn');
