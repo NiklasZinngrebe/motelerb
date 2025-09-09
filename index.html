@@ -1,222 +1,225 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOTEL ERB</title>
-<style>
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTEL ERB</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-/* Fullscreen Video Background */
-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
+        /* Fullscreen Video Background */
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
 
-/* Overlay Text */
-.overlay-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 8rem;
-    color: pink;
-    font-weight: bold;
-    text-align: center;
-}
+        /* Overlay Text */
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            color: pink;
+            font-weight: bold;
+            text-align: center;
+        }
 
-/* Floating Buttons */
-.floating-buttons {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
+        /* Floating Buttons */
+        .floating-buttons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
-.float-btn {
-    position: absolute;
-    padding: 0.6rem 1.5rem;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #ff7eb9, #ff65a3);
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    pointer-events: auto;
-    transition: all 0.3s ease;
-}
+        .float-btn {
+            position: absolute;
+            padding: 0.6rem 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #ff7eb9, #ff65a3);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
 
-.float-btn:hover {
-    transform: scale(1.1);
-    background: linear-gradient(135deg, #ff65a3, #ff3d8f);
-}
+        .float-btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ff65a3, #ff3d8f);
+        }
 
-.float-btn:active {
-    transform: scale(0.95);
-}
+        .float-btn:active {
+            transform: scale(0.95);
+        }
 
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-}
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
 
-.modal-content {
-    position: relative;
-    width: 80%;
-    max-width: 900px;
-    aspect-ratio: 16/9;
-    background: black;
-    border-radius: 10px;
-    overflow: hidden;
-}
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-.modal-content iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
 
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    z-index: 20;
-}
-</style>
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            z-index: 20;
+        }
+    </style>
 </head>
 <body>
-<video id="bg-video" autoplay muted loop playsinline>
-    <source src="AVCHD_Test_4.mp4" type="video/mp4">
-    Dein Browser unterstützt dieses Videoformat nicht.
-</video>
+    <!-- Background Video -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="AVCHD_Test_4.mp4" type="video/mp4">
+        Dein Browser unterstützt dieses Videoformat nicht.
+    </video>
 
-<div class="overlay-text">MOTEL ERB</div>
+    <!-- Overlay Text -->
+    <div class="overlay-text">MOTEL ERB</div>
 
-<div class="floating-buttons">
-    <a href="https://www.instagram.com/motel.erb/" target="_blank" class="float-btn">Instagram</a>
-    <a href="#" id="spotify-btn" class="float-btn">Spotify</a>
-    <a href="#" id="youtube-btn" class="float-btn">YouTube</a>
-    <a href="kontakt.html" class="float-btn">Kontakt & Impressum</a>
-</div>
-
-<div id="youtube-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <iframe id="youtube-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <a href="https://www.instagram.com/motel.erb/" target="_blank" class="float-btn">Instagram</a>
+        <a href="#" id="spotify-btn" class="float-btn">Spotify</a>
+        <a href="#" id="youtube-btn" class="float-btn">YouTube</a>
+        <a href="kontakt.html" class="float-btn">Kontakt & Impressum</a>
     </div>
-</div>
 
-<script>
-window.addEventListener('load', () => {
-    const video = document.getElementById('bg-video');
+    <!-- YouTube Modal -->
+    <div id="youtube-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <iframe id="youtube-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
 
-    // Ensure video plays on mobile
-    video.muted = true;
-    video.playsInline = true;
-    video.autoplay = true;
-    video.play().catch(() => {
-        function playOnInteraction() {
-            video.play().catch(() => console.log("Still blocked."));
-            window.removeEventListener('click', playOnInteraction);
-            window.removeEventListener('touchstart', playOnInteraction);
-        }
-        window.addEventListener('click', playOnInteraction, { once: true });
-        window.addEventListener('touchstart', playOnInteraction, { once: true });
-    });
+    <script>
+    window.onload = () => {
+        const video = document.getElementById('bg-video');
 
-    // Floating buttons
-    const floatButtons = Array.from(document.querySelectorAll('.float-btn'));
-    const directions = [];
-
-    // Ensure buttons are fully rendered before measuring size
-    floatButtons.forEach((btn, i) => {
-        const rect = btn.getBoundingClientRect();
-        const btnWidth = rect.width;
-        const btnHeight = rect.height;
-
-        btn.style.left = Math.random() * (window.innerWidth - btnWidth) + "px";
-        btn.style.top = Math.random() * (window.innerHeight - btnHeight) + "px";
-
-        directions[i] = {
-            x: (Math.random() - 0.5) * 0.5,
-            y: (Math.random() - 0.5) * 0.5
-        };
-
-        // Jump video on hover
-        btn.addEventListener('mouseenter', () => {
-            video.currentTime += 5;
-            if (video.currentTime > video.duration) video.currentTime = 0;
+        // Ensure video plays programmatically
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        video.play().catch(() => {
+            console.log("Autoplay blocked. Waiting for user interaction...");
+            function playOnInteraction() {
+                video.play().catch(() => console.log("Still blocked."));
+                window.removeEventListener('click', playOnInteraction);
+                window.removeEventListener('touchstart', playOnInteraction);
+            }
+            window.addEventListener('click', playOnInteraction, { once: true });
+            window.addEventListener('touchstart', playOnInteraction, { once: true });
         });
-    });
 
-    function animate() {
+        // Floating buttons
+        const floatButtons = document.querySelectorAll('.float-btn');
+        const directions = [];
+
         floatButtons.forEach((btn, i) => {
-            let x = parseFloat(btn.style.left);
-            let y = parseFloat(btn.style.top);
+            const btnWidth = btn.offsetWidth;
+            const btnHeight = btn.offsetHeight;
 
-            x += directions[i].x;
-            y += directions[i].y;
+            btn.style.left = Math.random() * (window.innerWidth - btnWidth) + "px";
+            btn.style.top = Math.random() * (window.innerHeight - btnHeight) + "px";
 
-            if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
-            if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
+            directions[i] = {
+                x: (Math.random() - 0.5) * 0.5,
+                y: (Math.random() - 0.5) * 0.5
+            };
 
-            btn.style.left = x + "px";
-            btn.style.top = y + "px";
+            // Jump video on hover
+            btn.addEventListener('mouseenter', () => {
+                video.currentTime += 5;
+                if (video.currentTime > video.duration) video.currentTime = 0;
+            });
         });
 
-        requestAnimationFrame(animate);
-    }
+        function animate() {
+            floatButtons.forEach((btn, i) => {
+                let x = parseFloat(btn.style.left) || 0;
+                let y = parseFloat(btn.style.top) || 0;
 
-    animate();
+                x += directions[i].x;
+                y += directions[i].y;
 
-    // YouTube modal
-    const youtubeBtn = document.getElementById('youtube-btn');
-    const modal = document.getElementById('youtube-modal');
-    const closeBtn = modal.querySelector('.close-btn');
-    const iframe = document.getElementById('youtube-frame');
+                if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
+                if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
 
-    youtubeBtn.addEventListener('click', () => {
-        iframe.src = "https://www.youtube.com/embed/LPo7cWrP9wQ?autoplay=1";
-        modal.style.display = "flex";
-    });
+                btn.style.left = x + "px";
+                btn.style.top = y + "px";
+            });
 
-    closeBtn.addEventListener('click', () => {
-        iframe.src = "";
-        modal.style.display = "none";
-    });
+            requestAnimationFrame(animate);
+        }
 
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        animate();
+
+        // YouTube modal
+        const youtubeBtn = document.getElementById('youtube-btn');
+        const modal = document.getElementById('youtube-modal');
+        const closeBtn = modal.querySelector('.close-btn');
+        const iframe = document.getElementById('youtube-frame');
+
+        youtubeBtn.addEventListener('click', () => {
+            iframe.src = "https://www.youtube.com/embed/LPo7cWrP9wQ?autoplay=1";
+            modal.style.display = "flex";
+        });
+
+        closeBtn.addEventListener('click', () => {
             iframe.src = "";
             modal.style.display = "none";
-        }
-    });
-});
-</script>
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                iframe.src = "";
+                modal.style.display = "none";
+            }
+        });
+    };
+    </script>
 </body>
 </html>
