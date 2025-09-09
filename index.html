@@ -170,14 +170,25 @@
     <script>
     const video = document.getElementById('bg-video');
     
-    // --- Mobile autoplay fix ---
+    // Mobile autoplay fix
     video.muted = true;
     video.playsInline = true;
     video.autoplay = true;
     
-    // Try to play programmatically
+    // Programmatic play
     video.play().catch(() => {
         console.log("Autoplay blocked on this device, user interaction required.");
+    
+        function playOnInteraction() {
+            video.play().catch(() => {
+                console.log("Still blocked.");
+            });
+            window.removeEventListener('touchstart', playOnInteraction);
+            window.removeEventListener('click', playOnInteraction);
+        }
+    
+        window.addEventListener('touchstart', playOnInteraction, { once: true });
+        window.addEventListener('click', playOnInteraction, { once: true });
     });
     
     // Floating buttons animation
