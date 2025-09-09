@@ -223,3 +223,192 @@
     </script>
 </body>
 </html>
+
+        /* Floating Buttons */
+        .floating-buttons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .float-btn {
+            position: absolute;
+            padding: 0.6rem 1.5rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #ff7eb9, #ff65a3);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ff65a3, #ff3d8f);
+        }
+
+        .float-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="AVCHD_Test_4.mp4" type="video/mp4">
+        Dein Browser unterstützt dieses Videoformat nicht.
+    </video>
+
+    <!-- Overlay Text -->
+    <div class="overlay-text">MOTEL ERB</div>
+
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <a href="https://www.instagram.com/motel.erb/" target="_blank" class="float-btn">Instagram</a>
+        <a href="#" id="spotify-btn" class="float-btn">Spotify</a>
+        <a href="#" id="youtube-btn" class="float-btn">YouTube</a>
+        <a href="kontakt.html" class="float-btn">Kontakt & Impressum</a>
+    </div>
+
+    <!-- YouTube Modal -->
+    <div id="youtube-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <iframe id="youtube-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+    window.onload = () => {
+        const video = document.getElementById('bg-video');
+
+        // Ensure video plays programmatically
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        video.play().catch(() => {
+            console.log("Autoplay blocked. Waiting for user interaction...");
+            function playOnInteraction() {
+                video.play().catch(() => console.log("Still blocked."));
+                window.removeEventListener('click', playOnInteraction);
+                window.removeEventListener('touchstart', playOnInteraction);
+            }
+            window.addEventListener('click', playOnInteraction, { once: true });
+            window.addEventListener('touchstart', playOnInteraction, { once: true });
+        });
+
+        // Floating buttons
+        const floatButtons = document.querySelectorAll('.float-btn');
+        const directions = [];
+
+        floatButtons.forEach((btn, i) => {
+            const btnWidth = btn.offsetWidth;
+            const btnHeight = btn.offsetHeight;
+
+            btn.style.left = Math.random() * (window.innerWidth - btnWidth) + "px";
+            btn.style.top = Math.random() * (window.innerHeight - btnHeight) + "px";
+
+            directions[i] = {
+                x: (Math.random() - 0.5) * 0.5,
+                y: (Math.random() - 0.5) * 0.5
+            };
+
+            // Jump video on hover
+            btn.addEventListener('mouseenter', () => {
+                video.currentTime += 5;
+                if (video.currentTime > video.duration) video.currentTime = 0;
+            });
+        });
+
+        function animate() {
+            floatButtons.forEach((btn, i) => {
+                let x = parseFloat(btn.style.left) || 0;
+                let y = parseFloat(btn.style.top) || 0;
+
+                x += directions[i].x;
+                y += directions[i].y;
+
+                if (x <= 0 || x >= window.innerWidth - btn.offsetWidth) directions[i].x *= -1;
+                if (y <= 0 || y >= window.innerHeight - btn.offsetHeight) directions[i].y *= -1;
+
+                btn.style.left = x + "px";
+                btn.style.top = y + "px";
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // YouTube modal
+        const youtubeBtn = document.getElementById('youtube-btn');
+        const modal = document.getElementById('youtube-modal');
+        const closeBtn = modal.querySelector('.close-btn');
+        const iframe = document.getElementById('youtube-frame');
+
+        youtubeBtn.addEventListener('click', () => {
+            iframe.src = "https://www.youtube.com/embed/LPo7cWrP9wQ?autoplay=1";
+            modal.style.display = "flex";
+        });
+
+        closeBtn.addEventListener('click', () => {
+            iframe.src = "";
+            modal.style.display = "none";
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                iframe.src = "";
+                modal.style.display = "none";
+            }
+        });
+    };
+    </script>
+</body>
+</html>
